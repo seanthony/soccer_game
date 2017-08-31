@@ -1,5 +1,18 @@
-import os, disk
+import os, disk, core
 from termcolor import cprint
+
+
+def game_end():
+    print('\n\n')
+    cprint('''              .-=========-.
+              \\'-=======-'/
+              _|   .=.   |_
+             ((|  {{1}}  |))
+              \\|   /|\   |/
+               \\__ '`' __/
+                 _`) (`_
+               _/_______\\_
+              /___________\\''', 'green')
 
 
 def print_welcome():
@@ -50,11 +63,60 @@ def print_welcome():
 
 
 def main():
+    os.system('clear')
     print_welcome()
     input()
     os.system('clear')
     goalie = disk.get_goalie()
-    print(goalie)
+    game = core.Game(
+        core.Player(
+            input('Player 1 Name: ').title(),
+            input('Player 1 Team: ').title()), core.Player(
+                input('Player 2 Name: ').title(),
+                input('Player 2 Name: ').title()), 5, core.Ball())
+    while game.keep_playing():
+        os.system('clear')
+        cprint(
+            '{} PRESS ENTER TO SHOOT'.format(game.p1.name.upper()).center(69),
+            'yellow',
+            attrs=['blink', 'reverse'])
+        print(game)
+        print(goalie, end="")
+        input()
+        score = game.p1.score
+        game.ball.position = game.p1.shoot()
+        cprint(game.ball, attrs=['bold'])
+        if score < game.p1.score:
+            cprint('{} SCORES!'.format(game.p1.name.upper()).center(69, ' '),
+                   'green')
+        else:
+            cprint('{} misses...'.format(game.p1.name).center(69, ' '), 'red')
+        input('press enter to continue')
+
+        os.system('clear')
+        cprint(
+            '{} PRESS ENTER TO SHOOT'.format(game.p2.name.upper()).center(69),
+            'yellow',
+            attrs=['blink', 'bold'])
+        print(game)
+        print(goalie, end="")
+        input()
+        score = game.p2.score
+        game.ball.position = game.p2.shoot()
+        cprint(game.ball, attrs=['bold'])
+        if score < game.p2.score:
+            cprint('{} SCORES!'.format(game.p2.name.upper()).center(69, ' '),
+                   'green')
+        else:
+            cprint('{} misses...'.format(game.p2.name).center(69, ' '), 'red')
+        input('press enter to continue')
+        game.round += 1
+
+    os.system('clear')
+    game_end()
+    cprint('{} WINS THE GAME!'.format(game.winner().upper()).center(41, ' '),
+           'green',
+           attrs=['blink', 'reverse'])
 
 
 if __name__ == '__main__':
