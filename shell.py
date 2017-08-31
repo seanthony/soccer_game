@@ -1,4 +1,4 @@
-import os
+import os, disk
 from termcolor import cprint
 
 
@@ -53,6 +53,8 @@ def main():
     print_welcome()
     input()
     os.system('clear')
+    goalie = disk.get_goalie()
+    print(goalie)
 
 
 if __name__ == '__main__':
